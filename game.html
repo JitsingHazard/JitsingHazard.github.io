@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jits-vue</title>
+    <link rel="icon" type="image/svg+xml" href="playerFace.svg"/>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src='https://meet.jit.si/external_api.js'></script>
+    <script src='cards.js'></script>
+    <script src='DataChannelJitsi.js'></script>
+    <script src='GM.js'></script>
+    <script src='game.js'></script>
+    <script src='player.js'></script>
+</head>
+<body class="flex-row">
+<div id="game" v-cloak>
+    <div class="borderline flex-row">
+        <span class="flex-column">
+            <input type="button" value="Quit game" onclick="javascript:player.quitGame();"/>
+            <input v-if="isGM || status < 4" type="button" value="Start Game !" onclick="javascript:player.startGame();"/><!-- GM.ST_IDLE or GM.ST_WAIT_MIN_PARTICIPANTS -->
+        </span>
+        <span class="status">
+            <template v-if="status == 3"><!-- GM.ST_WAIT_MIN_PARTICIPANTS -->
+                <p>Waiting for at least 3 players...</p>
+            </template>
+            <template v-else-if="status == 4"><!-- GM.ST_WAIT_FOR_SETUP -->
+                <p v-if="isJudge">
+                    <strong>Judge, time to play !</strong>
+                </p>
+                <p v-else>
+                    Waiting for the judge to play...
+                </p>
+            </template>
+            <template v-else-if="status == 5"><!-- GM.ST_WAIT_FOR_PLAYERS -->
+                <p v-if="isJudge">
+                    Waiting for players...
+                </p>
+                <p v-else>
+                    <strong>Time to play !</strong>
+                </p>
+            </template>
+            <template v-else-if="status == 6"><!-- GM.ST_WAIT_FOR_VOTE -->
+                <p v-if="isJudge">
+                    <strong>Judge, time to vote !</strong>
+                </p>
+                <p v-else>
+                    Waiting for the judge to vote...
+                </p>
+            </template>
+            <template v-else-if="status == 7"><!-- GM.ST_WAIT_FOR_NEXT_ROUND -->
+                <input type="button" value="Start next round!" :onclick="'javascript:player.nextRound(\'' + myPlayerid + '\');'" />
+            </template>
+        </span>
+    </div>
+    <table class="borderline">
+        <tr v-for="player in players" :key="player.id">
+            <td class="player-card" v-bind:style="{'background-color': playerColor(player.idx)}">
+                <img src="playerFace.svg" style="width: 120px;">
+                <div>
+                    <template v-if="player.id == judgeId">
+                        <strong>*JUDGE*</strong><br/>
+                    </template>
+                    {{ player.name }}<br/>{{ player.score }}
+                </div>
+            </td>
+            <td><img :src="player.panel0.url" style="width: 120px;"></td>
+            <td><img :src="player.panel1.url" style="width: 120px;"></td>
+            <td><img :src="player.panel2.url" style="width: 120px;"></td>
+            <td v-if="isJudge && status == 6 && player.id != myPlayerid">
+                <input type="button" value="Winner!" :onclick="'javascript:player.vote(\'' + player.id + '\');'" />
+            </td>
+        </tr>
+    </table>
+        <span id="hand-0" class="flex-row borderline">
+        <div v-for="(card, index) in cards" :key="card.id">
+            <img :src="card.url" style="width: 120px;" />
+            <div>
+                <input type="button" value="1" :onclick="'javascript:player.pickCard(' + index + ', 0);'" />
+                <input type="button" value="2" :onclick="'javascript:player.pickCard(' + index + ', 1);'" />
+                <input type="button" value="3" :onclick="'javascript:player.pickCard(' + index + ', 2);'" />
+            </div>
+        </div>
+    </span>
+</div>
+<div id="meet">
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('room'))
+        room = urlParams.get('room');
+    else
+        room = 'JitsingHazard';
+    const domain = 'beta.meet.jit.si';//'meet.jit.si';
+    const options = {
+        roomName: room,
+        parentNode: document.querySelector('#meet'),
+        openBridgeChannel: 'datachannel'//websocket / true / datachannel
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
+    api.addEventListener('videoConferenceJoined', () => {
+        if(urlParams.has('displayname'))
+            api.executeCommand ('displayName', urlParams.get('displayname'));
+
+        dc = new DCJitsi(api);
+        api.addEventListener('endpointTextMessageReceived', (obj) => {
+            dc.endpointTextMessageReceived(obj);
+        });
+        api.addEventListener('participantJoined', dc.participantJoined);
+        api.addEventListener('participantLeft', dc.participantLeft);
+        api.addEventListener('participantKickedOut', dc.participantKickedOut);
+        player = new Player(dc);
+    });
+</script>
+</div>
+</body>
+</html>

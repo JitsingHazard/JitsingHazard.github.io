@@ -1,0 +1,59 @@
+[v-cloak]
+{
+    display: none;
+}
+html, body {
+    height: 100%;
+    margin:0px;
+}
+
+body
+{
+    background: rgb(34,193,195);
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+}
+
+#game
+{
+    margin: 8px;
+}
+
+.flex-row
+{
+    display: flex;
+    flex-flow: row wrap;
+    text-align: center;
+}
+
+.flex-column
+{
+    display: flex;
+    flex-flow: column wrap;
+    text-align: center;
+}
+
+.status
+{
+    padding: 5px;
+    vertical-align: middle;
+}
+
+.player-card
+{
+    border-radius: 25px;
+}
+
+.borderline
+{
+    border-radius: 25px;
+    padding: 10px;
+    border: 2px solid grey;
+    margin-bottom: 10px;
+    width:fit-content;
+}
+
+#meet
+{
+    width:100vh;
+    height:100vh;
+}
