@@ -18,6 +18,12 @@
       <input type="text" id="displayname" name="displayname" value="dude"><br/>
       <label for="room">Room :</label>
       <input type="text" id="room" name="room" value="JitsingHazard"><br/>
+      <label for="server">Jitsi server:</label>
+      <input type="text" id="server" name="server" value="beta.meet.jit.si">&nbsp;
+      <select id="serverlist" onchange="javascript:document.getElementById ('server').value = this.value;">
+        <option value="beta.meet.jit.si">beta.meet.jit.si</option>
+        <option value="meet.jit.si">meet.jit.si</option>
+      </select><br/>
       <input type="submit" value="Join" />
   </form>
   Notes:

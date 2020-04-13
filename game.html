@@ -91,7 +91,10 @@
         room = urlParams.get('room');
     else
         room = 'JitsingHazard';
-    const domain = 'beta.meet.jit.si';//'meet.jit.si';
+    if(urlParams.has('server'))
+        domain = urlParams.get('server');
+    else
+        domain = 'beta.meet.jit.si';
     const options = {
         roomName: room,
         parentNode: document.querySelector('#meet'),
