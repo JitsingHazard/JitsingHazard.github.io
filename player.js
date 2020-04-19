@@ -27,34 +27,18 @@ class Player {
             },
             methods: {
                 playerColor: function(playeridx) {
-                    return Player.colors[playeridx % Player.colors.length];//TODO doesnt work
+                    return Player.colors[playeridx % Player.colors.length];
                 }
             }
         });
-    }
-
-    updateHand(cards) {
-        this.game.cards.splice(0, this.game.cards.length, ...cards);
-    }
-
-    getPanelUrlFromCards(playerId, card) {
-        if(card.state == Card.FACE_UP) {
-            return card.url;
-        }else if(playerId == this.id && card.state >= 0 && card.state < this.game.cards.length) {//we display our panels
-            return this.game.cards[card.state].url;
-        }else {
-            return 'card.png';
-        }
     }
 
     updateGame(game) {
         this.game.isJudge = (this.id == game.info.judgeId);
         this.game.judgeId = game.info.judgeId;
         this.game.status = game.info.st;
-        this.game.players.splice(0,this.game.players.length);
-        game.players.forEach(player => {//TODO replace forEach with splice(, , ...game.players)
-            this.game.players.push({ 'id': player.id, 'idx': player.idx, 'name': player.displayName, 'score': player.score, 'panel0': player.panel0, 'panel1': player.panel1, 'panel2': player.panel2 })
-        });
+        this.game.cards.splice(0, this.game.cards.length, ...game.hand);
+        this.game.players.splice(0,this.game.players.length, ...game.players);
     }
 
     startGame() {
@@ -116,17 +100,9 @@ class Player {
         if(this.GMid == null)
             this.GMid = id;
         let obj = JSON.parse(strobj);//TODO YOLO
-        if(id == this.GMid){
-            switch(obj._type) {
-                case GM.EVT_UPDATE_HAND:
-                    console.log(obj.data);
-                    this.updateHand(obj.data);
-                break;
-                case GM.EVT_UPDATE_GAME:
-                    console.log(obj.data);
-                    this.updateGame(obj.data);
-                break;
-            }
+        if(id == this.GMid && obj._type == GM.EVT_UPDATE_GAME){//received EVT_UPDATE_GAME event from GM
+            console.log(obj.data);
+            this.updateGame(obj.data);
         }else if(this.game.isGM){
             this.gm.processObjectReceived(id, obj);
         }

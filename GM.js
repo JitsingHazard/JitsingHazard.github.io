@@ -1,7 +1,7 @@
 // Game Master is hosted by room creator (first to join the room)
 
 // TODO
-// - when gamw is over, reset state to ST_IDLE
+// - when game is over, reset state to ST_IDLE
 
 class GM {
 
@@ -18,12 +18,10 @@ class GM {
     static EVT_VOTE = 3;
     static EVT_NEXT_ROUND = 3;
     static EVT_UPDATE_GAME = 4;
-    static EVT_UPDATE_HAND = 5;
 
     constructor(dc, id) {
         this.dc = dc;
         this.id = id;
-        this.deck = Array.from(Card.cards);
         this.game = new Object();
         this.game.st = GM.ST_IDLE;
     }
@@ -41,24 +39,16 @@ class GM {
         return card;
     }
 
-    //send private info for specific player : cards in hand
-    updateHand(id, cards) {
-        let obj = new Object();
-        obj['_type'] = GM.EVT_UPDATE_HAND;
-        obj['data'] = cards;
-        this.dc.send(this.id, id, obj);
-    }
-
-    //send public game info for every player : board, score, players,...
+    //send game info to each player
     updateGame() {
         let obj = new Object();
         obj['_type'] = GM.EVT_UPDATE_GAME;
-        obj['data'] = this.game;
         this.players.forEach(player => {
+            let hand = this.hands.find(hand => hand.id == player.id);
             if(this.game.st == GM.ST_WAIT_FOR_VOTE || this.game.st == GM.ST_WAIT_FOR_NEXT_ROUND)
-                obj['data'] = {info: this.game, players: this.players };
+                obj['data'] = {'info': this.game, 'players': this.players, 'hand': hand.cards };
             else
-                obj['data'] = {info: this.game, players: [player] };
+                obj['data'] = {'info': this.game, 'players': [player], 'hand': hand.cards };
             this.dc.send(this.id, player.id, obj); 
         });
     }
@@ -91,7 +81,7 @@ class GM {
         let idx = 0;
         for (let [key, value] of Object.entries(players)) {//TODO bug: id converted to string
             this.hands.push({ 'id': key, 'cards': [] });
-            this.players.push({ 'id': key, 'idx': idx++, 'displayName': value.displayName, 'score': 0, 'panel0': Card.holder, 'panel1': Card.holder, 'panel2': Card.holder});
+            this.players.push({ 'id': key, 'idx': idx++, 'name': value.displayName, 'score': 0, 'panel0': Card.holder, 'panel1': Card.holder, 'panel2': Card.holder});
             this.game.panels_to_fill += 3;
         }
         return this.hands.length;
@@ -113,7 +103,6 @@ class GM {
             for(let i = hand.cards.length; i < n; i++) {
                 hand.cards.push(this.popTopCardFromDeck());
             }
-            this.updateHand(hand.id, hand.cards);
         });
     }
 
@@ -152,7 +141,6 @@ class GM {
                     var card = this.hands[i].cards.splice(idx, 1, card);
                 else
                     var card = this.hands[i].cards.splice(idx, 1);
-                this.updateHand(this.hands[i].id, this.hands[i].cards);
                 return card[0];
             }
         }
@@ -225,9 +213,12 @@ class GM {
             if(this.enrollPlayers() < 3) {//3 people at least
                 return GM.ST_WAIT_MIN_PARTICIPANTS;
             }
-            this.shuffleDeck();//TODO also reset deck in case of new game
+        //reset deck
+            this.deck = Array.from(Card.cards);
+        //shuffle deck
+            this.shuffleDeck();
             this.game.judgeId = null;
-            //continue to case GM.EVT_NEXT since code is identical
+        //continue to case GM.EVT_NEXT since code is identical
             this.game.st = GM.ST_WAIT_FOR_NEXT_ROUND;
 
         case GM.EVT_NEXT:
