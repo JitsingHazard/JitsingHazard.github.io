@@ -77,6 +77,7 @@ class GM {
         this.hands = new Array();//private cards in hand for each player
         this.players = new Array();//public players info
         this.game.panels_to_fill = -1;//judge wont play
+        this.game.bonus_round = false;
         let players = this.dc.getParticipants();
         let idx = 0;
         for (let [key, value] of Object.entries(players)) {//TODO bug: id converted to string
@@ -89,6 +90,7 @@ class GM {
 
     resetRound() {
         this.game.panels_to_fill = -1;//judge wont play
+        this.game.bonus_round = false;
         this.players.forEach(player => {
             player.panel0 = Card.holder;
             player.panel1 = Card.holder;
@@ -106,7 +108,7 @@ class GM {
         });
     }
 
-    setUpCard(pos, card, redCard = false) {
+    setUpCard(pos, card) {
         card.state = Card.FACE_UP;
         this.players.forEach(player => {
             switch(pos) {
@@ -117,7 +119,7 @@ class GM {
                     player.panel1 = card;
                     break;
                 case 2:
-                    if(!redCard){//when setup is black, the empty panel is at the end
+                    if(!this.game.bonus_round){//when setup is black, the empty panel is at the end
                         player.panel0 = player.panel1;
                         player.panel1 = card;
                         player.panel2 = Card.holder;
@@ -127,8 +129,6 @@ class GM {
                     break;
             }
             this.game.panels_to_fill--;
-            if(redCard)//judge doesnt play at all
-                this.game.panels_to_fill--;
         });
     }
 
@@ -148,17 +148,6 @@ class GM {
 
     takeCardByIdxFromHand(id, idx) {
         return this.replaceCardByIdxFromHand(id, idx, null);
-    }
-
-    revealCards(red = false) {
-        this.players.forEach(player => {
-            if(red) {
-                //TODO
-            }else{
-                let card = this.takeCardByIdxFromHand(player.id, player.panel2);
-                player.panel2 = card;
-            }
-        });
     }
 
     playCard(id, handIdx, panelIdx) {
@@ -202,6 +191,9 @@ class GM {
         for(let i = 0; i < this.players.length; i++) {
             if(this.players[i].id == playerId) {
                 this.players[i].score++;
+                if(this.game.bonus_round)
+                    this.players[i].score++;
+                return;
             }
         }
     }
@@ -221,7 +213,7 @@ class GM {
         //continue to case GM.EVT_NEXT since code is identical
             this.game.st = GM.ST_WAIT_FOR_NEXT_ROUND;
 
-        case GM.EVT_NEXT:
+        case GM.EVT_NEXT://next round
             if (this.game.st == GM.ST_WAIT_FOR_NEXT_ROUND) { //if someone wants to start next round
             // reset played cards from previous round
                 this.resetRound();
@@ -229,11 +221,20 @@ class GM {
                 this.dealCards(7);
             //pick a judge for next round
                 this.pickNextJudge();
-            //pop top card from deck, flip and place it on position 2
+            //pop top card from deck and flip it
                 let card = this.popTopCardFromDeck();
-                this.setUpCard(1, card);//1st setup card is middle card
-            //wait for judge to play
-                return GM.ST_WAIT_FOR_SETUP;
+                if(card.red){
+                    this.game.bonus_round = true;
+                    this.setUpCard(2, card);//red setup card is last panel
+                    this.game.panels_to_fill--;//judge wont even play
+                //wait for players to pick 2 cards each
+                    return GM.ST_WAIT_FOR_PLAYERS;
+                }else{
+                    this.game.bonus_round = false;
+                    this.setUpCard(1, card);//1st setup card is middle card
+                //wait for judge to play
+                    return GM.ST_WAIT_FOR_SETUP;
+                }
             }else{
                 console.log("GM exception : invalid next!");
             }
@@ -244,8 +245,10 @@ class GM {
                 let card = this.takeCardByIdxFromHand(senderId, obj.idx);
                 this.setUpCard(obj.pos, card);
                 return GM.ST_WAIT_FOR_PLAYERS;//start the game for other players
-            }else if (this.game.st == GM.ST_WAIT_FOR_PLAYERS && senderId != this.game.judgeId) {// if game has started, all players can play except judge
-                this.playCard(senderId, obj.idx, 2);
+            }else if ((this.game.st == GM.ST_WAIT_FOR_PLAYERS) &&// if game has started,
+                        (senderId != this.game.judgeId) &&       // all players can play except judge.
+                        (this.game.bonus_round ^ (obj.pos == 2))) {   // Also pos 2 is only played on non-bonus round
+                this.playCard(senderId, obj.idx, obj.pos);
                 if(this.game.panels_to_fill == 0) {//everyone has played, lets move to the vote
                     return GM.ST_WAIT_FOR_VOTE;
                 }else{
