@@ -18,6 +18,7 @@ class GM {
     static EVT_VOTE = 3;
     static EVT_NEXT_ROUND = 3;
     static EVT_UPDATE_GAME = 4;
+    static EVT_QUIT_GAME = 5;
 
     constructor(dc, id) {
         this.dc = dc;
@@ -54,7 +55,7 @@ class GM {
     }
 
     removePlayer(id){
-        //TODO remove from both this.players and this.hands
+        //TODO remove from both this.players and this.hands, and judge id
     }
 
     pickNextJudge() {
@@ -267,6 +268,13 @@ class GM {
                 console.log("GM exception : invalid vote!");
             }
             break;
+
+        case GM.EVT_QUIT_GAME:
+            if(senderId == this.id){// player hosting GM is leaving, game over.
+                return GM.ST_IDLE;
+            }else{
+                this.removePlayer(senderId);
+            }
 
         default:
             console.log("GM exception : invalid action!");

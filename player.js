@@ -39,8 +39,14 @@ class Player {
         this.game.judgeId = game.info.judgeId;
         this.game.bonus_round = game.info.bonus_round;
         this.game.status = game.info.st;
-        this.game.cards.splice(0, this.game.cards.length, ...game.hand);
-        this.game.players.splice(0,this.game.players.length, ...game.players);
+        if(this.game.status == GM.ST_IDLE){//game has been reset
+            this.GMid = null;//anyone can host a new game
+            this.game.cards.length = 0;
+            this.game.players.length = 0;
+        }else{//it's on !
+            this.game.cards.splice(0, this.game.cards.length, ...game.hand);
+            this.game.players.splice(0,this.game.players.length, ...game.players);
+        }
     }
 
     startGame() {
@@ -81,6 +87,10 @@ class Player {
     }
 
     quitGame() {
+        let obj = new Object();
+        obj['_type'] = GM.EVT_QUIT_GAME;
+        obj['data'] = {'id': this.id};
+        this.sendToGM(this.id, obj);
         this.game.status = GM.ST_IDLE;
         this.game.isGM = false;
         this.GMid = null;
