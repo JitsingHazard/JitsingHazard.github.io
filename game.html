@@ -66,7 +66,7 @@
             </td>
             <td><img :src="player.panel0.url" style="width: 120px;"></td>
             <td><img :src="player.panel1.url" style="width: 120px;"></td>
-            <td><img :src="player.panel2.url" style="width: 120px;" v-bind:class="{ 'red-card': player.panel2.red }"></td>
+            <td><img :src="player.panel2.url" style="width: 120px;" v-bind:class="{ 'red-card': bonus_round }"></td>
             <td v-if="isJudge && status == 6 && player.id != myPlayerid">
                 <input type="button" value="Winner!" :onclick="'javascript:player.vote(\'' + player.id + '\');'" />
             </td>

@@ -24,6 +24,7 @@ class Player {
                 status: GM.ST_IDLE,
                 myPlayerid: this.id,
                 isGM: false,
+                bonus_round: false,
             },
             methods: {
                 playerColor: function(playeridx) {
@@ -36,6 +37,7 @@ class Player {
     updateGame(game) {
         this.game.isJudge = (this.id == game.info.judgeId);
         this.game.judgeId = game.info.judgeId;
+        this.game.bonus_round = game.info.bonus_round;
         this.game.status = game.info.st;
         this.game.cards.splice(0, this.game.cards.length, ...game.hand);
         this.game.players.splice(0,this.game.players.length, ...game.players);
