@@ -77,7 +77,6 @@ img
 #cards 
 {
     margin:5px;
-    width:40%;
     position: fixed;
     top:90px;
     left:0px;
@@ -92,6 +91,14 @@ img
     flex:1;
     overflow:hidden;
 }
+#hand-0 .card
+{
+    opacity:0.5
+}
+#hand-0 .card:hover
+{
+    opacity:1;
+}
 #hand{
     width:100%;
     display: flex;
@@ -99,9 +106,69 @@ img
 }
 #hand-0{
     position: fixed;
-    width:70%;
     bottom:70px;
     display:flex;
     justify-content: center;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width: 600px) {
+        #cards 
+    {
+        top:170px;
+        width:80%;
+    }
+    .card {
+        flex:auto;
+        width:60px;
+    }
+    #hand-0{
+        align-items: flex-end;
+        width:300px;
+    }
+}
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    #cards 
+{
+    width:60%;
+}
+
+#hand-0{
+    width:100%;
+}
+
+}
+@media screen and (min-width: 900px) and (max-width: 1100px) {
+    #cards 
+{
+    width:50%;
+}
+
+#hand-0{
+    width:80%;
+}
+
+}
+@media screen and (min-width: 1100px) and (max-width: 1300px) {
+    #cards 
+{
+    width:40%;
+}
+
+#hand-0{
+    width:70%;
+}
+
+}
+@media screen and (min-width: 1300px) {
+    #cards 
+{
+    width:30%;
+}
+
+#hand-0{
+    width:60%;
+}
+
 }
 
