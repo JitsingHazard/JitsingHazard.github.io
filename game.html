@@ -52,9 +52,7 @@
                 <input type="button" value="Start next round!" :onclick="'javascript:player.nextRound(\'' + myPlayerid + '\');'" />
             </template>
         </div>
-    </div>
-
-    <div id="cards" v-for="player in players" :key="player.id">
+         <div id="cards" v-for="player in players" :key="player.id">
         <div class="card" v-bind:style="{'background-color': playerColor(player.idx)}">
             <img src="playerFace.svg">
             <div>
@@ -84,9 +82,12 @@
         </div>
     </div>
 </div>
+    </div>
+
+   
 
 <div id="meet">
-</div>
+
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.has('room'))
@@ -117,5 +118,6 @@
         player = new Player(dc);
     });
 </script>
+</div>
 </body>
 </html>
