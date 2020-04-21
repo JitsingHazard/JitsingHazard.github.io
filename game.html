@@ -108,9 +108,9 @@
         api.addEventListener('endpointTextMessageReceived', (obj) => {
             dc.endpointTextMessageReceived(obj);
         });
-        api.addEventListener('participantJoined', dc.participantJoined);
-        api.addEventListener('participantLeft', dc.participantLeft);
-        api.addEventListener('participantKickedOut', dc.participantKickedOut);
+        api.addEventListener('participantJoined', ()=>{dc.participantJoined});
+        api.addEventListener('participantLeft', ()=>{dc.participantLeft});
+        api.addEventListener('participantKickedOut',()=>{dc.participantKickedOut});
         player = new Player(dc);
     });
 </script>
