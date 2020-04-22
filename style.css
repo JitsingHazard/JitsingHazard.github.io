@@ -17,6 +17,7 @@ body
 input
 {
     cursor:pointer;
+    flex:1;
 }
 
 img
@@ -97,6 +98,7 @@ img
 }
 #hand-0 .card:hover
 {
+    flex:1.3;
     opacity:1;
 }
 #hand{
@@ -105,6 +107,7 @@ img
     justify-content: center;
 }
 #hand-0{
+    align-items: flex-end;
     position: fixed;
     bottom:70px;
     display:flex;
@@ -121,6 +124,11 @@ img
     .card {
         flex:auto;
         width:60px;
+    }
+    #hand-0 .card:hover
+    {
+        flex:auto;
+        width:70px;
     }
     #hand-0{
         align-items: flex-end;
