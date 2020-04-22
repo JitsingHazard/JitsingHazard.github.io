@@ -82,8 +82,11 @@ img
 #centerhead{
 
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #centerhead img{
+
     width:150px;
     height:66px;
 }
@@ -130,7 +133,17 @@ img
     justify-content: center;
     flex-wrap: wrap;
 }
-
+@media screen and (max-width: 400px) {
+   
+    #righthead{
+    flex:auto;
+    display: none;
+    }
+    #centerhead{
+    flex:auto;
+    display: none;
+    }
+}
 @media screen and (max-width: 600px) {
         #cards 
     {
@@ -149,6 +162,13 @@ img
     #hand-0{
         align-items: flex-end;
         width:300px;
+    }
+    #righthead{
+    flex:auto;
+    display: none;
+    }
+    #centerhead{
+    flex:1;
     }
 }
 @media screen and (min-width: 600px) and (max-width: 900px) {
