@@ -74,7 +74,23 @@ img
     flex-flow: row wrap;
     text-align: center;
 }
+#lefthead{
+    display: flex;
+    flex:1;
+    flex-direction: row;
+}
+#centerhead{
 
+    display: flex;
+}
+#centerhead img{
+    width:150px;
+    height:66px;
+}
+#righthead{
+    flex:1;
+    display: flex;
+}
 #cards 
 {
     margin:5px;
