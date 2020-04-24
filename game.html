@@ -64,9 +64,18 @@
                     {{ player.name }}<br/>{{ player.score }}
                 </div>
             </td>
-            <td><img :src="player.panel0.url" style="width: 120px;"></td>
-            <td><img :src="player.panel1.url" style="width: 120px;"></td>
-            <td><img :src="player.panel2.url" style="width: 120px;" v-bind:class="{ 'red-card': bonus_round }"></td>
+            <td>
+                <img v-if="player.panel0.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel0.id + '.png'" style="width: 120px;" />
+                <img v-else src="blank.png" style="width: 120px;" />
+            </td>
+            <td>
+                <img v-if="player.panel1.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel1.id + '.png'" style="width: 120px;" />
+                <img v-else src="blank.png" style="width: 120px;" />
+            </td>
+            <td>
+                <img v-if="player.panel2.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel2.id + '.png'" style="width: 120px;" />
+                <img v-else src="blank.png" style="width: 120px;" />
+            </td>
             <td v-if="isJudge && status == 6 && player.id != myPlayerid">
                 <input type="button" value="Winner!" :onclick="'javascript:player.vote(\'' + player.id + '\');'" />
             </td>
@@ -74,7 +83,7 @@
     </table>
         <span id="hand-0" class="flex-row borderline">
         <div v-for="(card, index) in cards" :key="card.id">
-            <img :src="card.url" style="width: 120px;" />
+            <img :src="'https://rcg-cdn.explosm.net/panels/' + card.id + '.png'" style="width: 120px;" />
             <div>
                 <input type="button" value="1" :onclick="'javascript:player.pickCard(' + index + ', 0);'" />
                 <input type="button" value="2" :onclick="'javascript:player.pickCard(' + index + ', 1);'" />
