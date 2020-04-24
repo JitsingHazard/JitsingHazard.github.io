@@ -73,7 +73,7 @@
                 <img v-else src="blank.png" style="width: 120px;" />
             </td>
             <td>
-                <img v-if="player.panel2.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel2.id + '.png'" style="width: 120px;" />
+                <img v-if="player.panel2.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel2.id + '.png'" style="width: 120px;" v-bind:class="{ 'red-card': bonus_round }" />
                 <img v-else src="blank.png" style="width: 120px;" />
             </td>
             <td v-if="isJudge && status == 6 && player.id != myPlayerid">
