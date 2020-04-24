@@ -36,7 +36,6 @@ class GM {
 
     popTopCardFromDeck() {//TODO check deck size
         let card = this.deck.pop();
-        card.url = 'https://rcg-cdn.explosm.net/panels/' + card.id + '.png';
         return card;
     }
 
@@ -110,7 +109,6 @@ class GM {
     }
 
     setUpCard(pos, card) {
-        card.state = Card.FACE_UP;
         this.players.forEach(player => {
             switch(pos) {
                 case 0:
