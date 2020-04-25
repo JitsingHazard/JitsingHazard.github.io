@@ -149,6 +149,9 @@ img
     flex:auto;
     display: none;
     }
+    #hand{
+        justify-content: flex-start;
+    }
 }
 @media screen and (max-width: 600px) {
     .cardscont 
@@ -159,6 +162,9 @@ img
     .card {
         flex:auto;
         width:60px;
+    }
+    #hand{
+        justify-content: flex-start;
     }
     #hand-0 .card:hover
     {
@@ -182,9 +188,11 @@ img
 {
     width:60%;
 }
-
+#hand{
+        justify-content: flex-start;
+    }
 #hand-0{
-    width:100%;
+    width:80%;
 }
 
 }
@@ -193,7 +201,9 @@ img
 {
     width:50%;
 }
-
+#hand{
+        justify-content: flex-start;
+    }
 #hand-0{
     width:80%;
 }
