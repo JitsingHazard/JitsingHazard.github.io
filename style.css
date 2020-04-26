@@ -94,8 +94,7 @@ input
     top:90px;
     left:0px;
     display:flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     z-index:20;
     height:60%;
     overflow-y: scroll;
@@ -106,16 +105,17 @@ input
     display:flex;
     flex-direction: row;
     justify-content: flex-start;
-    /*align-items: flex-start;*/
+    align-items: flex-start;
     width:100%;
+    margin:1px 0px;
 }
 .fcard{
-    padding-bottom: 5px;
+
    margin:0px 1px;
     border-radius: 4%;
     flex:1;
     overflow:hidden; 
-    margin-bottom:5px; 
+
 }
 .fcard div{
     position: absolute;
@@ -139,8 +139,11 @@ img
     flex-direction: column;
     border-radius: 4%;
     overflow: hidden;
-    padding-bottom: 10px;
-
+    height:100%;
+    justify-content: center;
+}
+.winner input{   
+    
 }
 #hand-0 .card
 {
