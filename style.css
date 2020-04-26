@@ -99,6 +99,7 @@ input
     height:60%;
     overflow-y: scroll;
     align-items: flex-start;
+    margin:0px 5px;
 }
 .cards 
 {
@@ -192,7 +193,7 @@ img
     .cardscont 
     {
         top:170px;
-        width:80%;
+        width:100%;
         height:40%;
     }
     .card {
