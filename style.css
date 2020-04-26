@@ -118,7 +118,7 @@ input
 .fcard div{
     position: absolute;
     width:25%;
-    transform: translateY(-50px);
+    transform: translateY(-55px);
 }
 .card
 {

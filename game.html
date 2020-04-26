@@ -61,14 +61,16 @@
         <div id="righthead"></div>
         <div class="cardscont">
             <div class="cards" v-for="player in players" :key="player.id">
-                <div class="fcard" v-bind:style="{'background-color': playerColor(player.idx)}">
+                <div class="fcard" v-bind:style="[status == 6 && player.id != judgeId && player.id != myPlayerid?{'background-color': 'white'}:{'background-color': playerColor(player.idx)}]">
                     <img src="playerFace1.svg">
+                    <template v-if="status !== 6 || player.id == judgeId || player.id == myPlayerid">
                     <div>
                         <template v-if="player.id == judgeId">
                             <strong>*JUDGE*</strong><br/>
                         </template>
                         {{ player.name }}<br/>{{ player.score }}
                     </div>
+                </template>
                 </div>
                 <div class="card">
                     <img v-if="player.panel0.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel0.id + '.png'" />
