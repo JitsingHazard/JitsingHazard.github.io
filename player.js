@@ -113,7 +113,6 @@ class Player {
             this.GMid = id;
         let obj = JSON.parse(strobj);//TODO YOLO
         if(id == this.GMid && obj._type == GM.EVT_UPDATE_GAME){//received EVT_UPDATE_GAME event from GM
-            console.log(obj.data);
             this.updateGame(obj.data);
         }else if(this.game.isGM){
             this.gm.processObjectReceived(id, obj);

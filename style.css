@@ -20,12 +20,6 @@ input
     flex:1;
 }
 
-img
-{
-    width:100%;
-    border-radius: 4%;
-}
-
 #game
 {
     height:70px;
@@ -102,13 +96,29 @@ img
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
+    z-index:20;
+    height:60%;
+    overflow-y: scroll;
+    align-items: flex-start;
 }
 .cards 
 {
     display:flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: flex-start;
     width:100%;
+}
+.fcard{
+   margin:0px 1px;
+    border-radius: 4%;
+    flex:1;
+    overflow:hidden;  
+}
+.fcard div{
+    position: absolute;
+    width:25%;
+    transform: translateY(-50px);
 }
 .card
 {
@@ -116,6 +126,15 @@ img
     border-radius: 4%;
     flex:1;
     overflow:hidden;
+}
+img
+{
+    width:100%;
+    border-radius: 4%;
+}
+.winner {
+    display:flex;
+    flex-direction: column;
 }
 #hand-0 .card
 {
@@ -138,6 +157,13 @@ img
     display:flex;
     justify-content: center;
     flex-wrap: wrap;
+     
+}
+.above{
+    z-index:30;
+}
+.below{
+    z-index:10;
 }
 @media screen and (max-width: 400px) {
    
@@ -158,8 +184,13 @@ img
     {
         top:170px;
         width:80%;
+        height:70%;
     }
     .card {
+        flex:auto;
+        width:60px;
+    }
+    .fcard {
         flex:auto;
         width:60px;
     }

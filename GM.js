@@ -49,6 +49,8 @@ class GM {
                 obj['data'] = {'info': this.game, 'players': this.players, 'hand': hand.cards };
             else
                 obj['data'] = {'info': this.game, 'players': [player], 'hand': hand.cards };
+            
+//console.log("====================this.id, player.id, obj=======                                ", this.id, player.id, obj, "                       ========================================");
             this.dc.send(this.id, player.id, obj); 
         });
     }
@@ -290,7 +292,7 @@ class GM {
     }
 
     processObjectReceived(id, obj) {
-        console.log(obj.data);
+        //console.log(obj.data);
         this.game.st = this.processEvent(obj._type, obj.data, id);
         this.updateGame();
     }

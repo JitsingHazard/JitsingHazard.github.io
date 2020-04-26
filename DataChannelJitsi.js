@@ -10,6 +10,7 @@ class DCJitsi {
     }
 
     send(senderId, destId, obj) {
+        console.log("senderId, destId, obj", senderId, destId, obj);
         let strobj = JSON.stringify(obj);//TODO security
         if(destId == this.getMyId()){
             if(this.player)
@@ -28,6 +29,7 @@ class DCJitsi {
     }
 
     endpointTextMessageReceived(obj) {
+        console.log("obj", obj);
         if(this.player)
             this.player.processMessageReceived(obj.data.senderInfo.id, obj.data.eventData.text);
     }
