@@ -106,14 +106,16 @@ input
     display:flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: flex-start;
+    /*align-items: flex-start;*/
     width:100%;
 }
 .fcard{
+    padding-bottom: 5px;
    margin:0px 1px;
     border-radius: 4%;
     flex:1;
-    overflow:hidden;  
+    overflow:hidden; 
+    margin-bottom:5px; 
 }
 .fcard div{
     position: absolute;
@@ -133,8 +135,12 @@ img
     border-radius: 4%;
 }
 .winner {
-    display:flex;
+    display: flex;
     flex-direction: column;
+    border-radius: 4%;
+    overflow: hidden;
+    padding-bottom: 10px;
+
 }
 #hand-0 .card
 {
