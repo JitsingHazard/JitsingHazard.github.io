@@ -194,14 +194,11 @@ img
 @media screen and (max-width: 600px) {
     .cardscont 
     {
-        top:170px;
-        width:100%;
+        top:90px;
+        width:97%;
         max-height:30%;
+        overflow-y:scroll;
     }
-    /*.cardscont:active
-    {
-        max-height:60%;
-    }*/
 
     .card {
         flex:auto;
@@ -214,7 +211,7 @@ img
     #hand{
         justify-content: flex-start;
     }
-    #hand-0 .card:hover
+    #hand-0 .card:hover, #hand-0 .card:active
     {
         flex:auto;
         width:70px;
@@ -235,12 +232,12 @@ img
     .cardscont 
 {
     width:50%;
-    max-height:30%;
+    max-height:20%;
 }
    .cardscont:hover
 {
     width:60%;
-    max-height:60%;
+    max-height:70%;
 }
 #hand{
         justify-content: flex-start;
@@ -254,17 +251,18 @@ img
     .cardscont 
 {
     width:40%;
-    max-height:30%;
+    max-height:20%;
 }
    .cardscont:hover
 {
     width:60%;
+    max-height:70%;
 }
 #hand{
         justify-content: flex-start;
     }
 #hand-0{
-    width:80%;
+    width:70%;
 }
 
 }
@@ -272,16 +270,16 @@ img
     .cardscont 
 {
     width:35%;
-    max-height:30%;
+    max-height:20%;
 }
    .cardscont:hover
 {
     width:45%;
-    max-height:60%;
+    max-height:70%;
 }
 
 #hand-0{
-    width:70%;
+    width:60%;
 }
 
 }
@@ -289,16 +287,16 @@ img
     .cardscont 
 {
     width:30%;
-    max-height:30%;
+    max-height:20%;
 }
    .cardscont:hover
 {
-    width:40%;
-    max-height:60%;
+    width:35%;
+    max-height:70%;
 }
 
 #hand-0{
-    width:60%;
+    width:50%;
 }
 
 }
