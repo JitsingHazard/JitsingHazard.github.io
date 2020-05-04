@@ -59,7 +59,7 @@
             <img src="./jitsinghazard.png">
         </div>
         <div id="righthead"></div>
-        <div class="cardscont">
+        <div class="cardscont" v-bind:class="[status < 6 ? '' : 'overflow']">
             <div class="cards" v-for="player in players" :key="player.id">
                 <div class="fcard" v-bind:style="[status == 6 && player.id != judgeId && player.id != myPlayerid?{'background-color': 'white'}:{'background-color': playerColor(player.idx)}]">
                     <img src="playerFace1.svg">

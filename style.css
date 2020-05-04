@@ -96,7 +96,6 @@ input
     display:flex;
     flex-direction: column;
     z-index:20;
-    overflow-y: auto;
     align-items: flex-start;
     margin:0px 5px;
 }
@@ -169,6 +168,7 @@ img
     flex-wrap: wrap;
      
 }
+/*------------------FNT status --------------------*/
 .above{
     z-index:30;
     display:flex;
@@ -177,6 +177,19 @@ img
     z-index:10;
     display:none;
 }
+
+ .overflow
+{
+    overflow-y: auto;
+    max-height:20%;
+}
+ .overflow:hover
+{
+    max-height:70%;
+    overflow-y: auto;
+}
+
+/*----------------!= screens ------------------------*/
 @media screen and (max-width: 400px) {
    
     #righthead{
@@ -232,12 +245,11 @@ img
     .cardscont 
 {
     width:50%;
-    max-height:35%;
 }
+
    .cardscont:hover
 {
-    width:60%;
-    max-height:70%;
+    width:70%;
 }
 #hand{
         justify-content: flex-start;
@@ -251,12 +263,10 @@ img
     .cardscont 
 {
     width:40%;
-    max-height:35%;
 }
    .cardscont:hover
 {
     width:60%;
-    max-height:70%;
 }
 #hand{
         justify-content: flex-start;
@@ -270,12 +280,10 @@ img
     .cardscont 
 {
     width:35%;
-    max-height:35%;
 }
    .cardscont:hover
 {
     width:45%;
-    max-height:70%;
 }
 
 #hand-0{
@@ -287,12 +295,10 @@ img
     .cardscont 
 {
     width:30%;
-    max-height:35%;
 }
    .cardscont:hover
 {
     width:35%;
-    max-height:70%;
 }
 
 #hand-0{
