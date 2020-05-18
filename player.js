@@ -1,3 +1,4 @@
+
 class Player {
 
     //TODO security:
@@ -33,7 +34,21 @@ class Player {
             }
         });
     }
+    shuffle(array,judgeId,myPlayerid) {
+        let tab=[...array]
 
+        let judge = {}
+        let myPlayer = {}
+
+        let without_judge = tab.reduce((total,player)=>{
+            if (player.id == judgeId){judge = player}
+            if (player.id == myPlayerid){myPlayer = player}
+            return player.id != judgeId && player.id != myPlayerid ? [...total,player]:total
+        },[])
+        
+       without_judge.sort(() => Math.random() - 0.5);
+       return judgeId==myPlayerid?[judge,...without_judge]:[judge,myPlayer,...without_judge]
+    }
     updateGame(game) {
         this.game.isJudge = (this.id == game.info.judgeId);
         this.game.judgeId = game.info.judgeId;
@@ -44,8 +59,9 @@ class Player {
             this.game.cards.length = 0;
             this.game.players.length = 0;
         }else{//it's on !
+            let random_players =  this.game.status == 6 ? this.shuffle(game.players, game.info.judgeId, this.id):game.players
             this.game.cards.splice(0, this.game.cards.length, ...game.hand);
-            this.game.players.splice(0,this.game.players.length, ...game.players);
+            this.game.players.splice(0,this.game.players.length, ...random_players);
         }
     }
 
@@ -113,7 +129,6 @@ class Player {
             this.GMid = id;
         let obj = JSON.parse(strobj);//TODO YOLO
         if(id == this.GMid && obj._type == GM.EVT_UPDATE_GAME){//received EVT_UPDATE_GAME event from GM
-            console.log(obj.data);
             this.updateGame(obj.data);
         }else if(this.game.isGM){
             this.gm.processObjectReceived(id, obj);

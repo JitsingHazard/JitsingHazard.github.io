@@ -13,86 +13,103 @@
     <script src='GM.js'></script>
     <script src='player.js'></script>
 </head>
-<body class="flex-row">
+<body>
 <div id="game" v-cloak>
-    <div class="borderline flex-row">
-        <span class="flex-column">
-            <input type="button" value="Quit game" onclick="javascript:player.quitGame();"/>
-            <input v-if="isGM || status < 4" type="button" value="Start Game !" onclick="javascript:player.startGame();"/><!-- GM.ST_IDLE or GM.ST_WAIT_MIN_PARTICIPANTS -->
-        </span>
-        <span class="status">
-            <template v-if="status == 3"><!-- GM.ST_WAIT_MIN_PARTICIPANTS -->
-                <p>Waiting for at least 3 players...</p>
-            </template>
-            <template v-else-if="status == 4"><!-- GM.ST_WAIT_FOR_SETUP -->
-                <p v-if="isJudge">
-                    <strong>Judge, time to play !</strong>
-                </p>
-                <p v-else>
-                    Waiting for the judge to play...
-                </p>
-            </template>
-            <template v-else-if="status == 5"><!-- GM.ST_WAIT_FOR_PLAYERS -->
-                <p v-if="isJudge">
-                    Waiting for players...
-                </p>
-                <p v-else>
-                    <strong>Time to play !</strong>
-                </p>
-            </template>
-            <template v-else-if="status == 6"><!-- GM.ST_WAIT_FOR_VOTE -->
-                <p v-if="isJudge">
-                    <strong>Judge, time to vote !</strong>
-                </p>
-                <p v-else>
-                    Waiting for the judge to vote...
-                </p>
-            </template>
-            <template v-else-if="status == 7"><!-- GM.ST_WAIT_FOR_NEXT_ROUND -->
-                <input type="button" value="Start next round!" :onclick="'javascript:player.nextRound(\'' + myPlayerid + '\');'" />
-            </template>
-        </span>
-    </div>
-    <table class="borderline">
-        <tr v-for="player in players" :key="player.id">
-            <td class="player-card" v-bind:style="{'background-color': playerColor(player.idx)}">
-                <img src="playerFace.svg" style="width: 120px;">
-                <div>
-                    <template v-if="player.id == judgeId">
-                        <strong>*JUDGE*</strong><br/>
-                    </template>
-                    {{ player.name }}<br/>{{ player.score }}
-                </div>
-            </td>
-            <td>
-                <img v-if="player.panel0.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel0.id + '.png'" style="width: 120px;" />
-                <img v-else src="blank.png" style="width: 120px;" />
-            </td>
-            <td>
-                <img v-if="player.panel1.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel1.id + '.png'" style="width: 120px;" />
-                <img v-else src="blank.png" style="width: 120px;" />
-            </td>
-            <td>
-                <img v-if="player.panel2.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel2.id + '.png'" style="width: 120px;" v-bind:class="{ 'red-card': bonus_round }" />
-                <img v-else src="blank.png" style="width: 120px;" />
-            </td>
-            <td v-if="isJudge && status == 6 && player.id != myPlayerid">
-                <input type="button" value="Winner!" :onclick="'javascript:player.vote(\'' + player.id + '\');'" />
-            </td>
-        </tr>
-    </table>
-        <span id="hand-0" class="flex-row borderline">
-        <div v-for="(card, index) in cards" :key="card.id">
-            <img :src="'https://rcg-cdn.explosm.net/panels/' + card.id + '.png'" style="width: 120px;" />
-            <div>
-                <input type="button" value="1" :onclick="'javascript:player.pickCard(' + index + ', 0);'" />
-                <input type="button" value="2" :onclick="'javascript:player.pickCard(' + index + ', 1);'" />
-                <input type="button" value="3" :onclick="'javascript:player.pickCard(' + index + ', 2);'" />
+    <div id="headergame">
+        <div id="lefthead">
+            
+            <div class="flex-column">
+                <input type="button" value="Quit game" onclick="javascript:player.quitGame();"/>
+                <input v-if="isGM || status < 4" type="button" value="Start Game !" onclick="javascript:player.startGame();"/><!-- GM.ST_IDLE or GM.ST_WAIT_MIN_PARTICIPANTS -->
+            </div>
+            <div class="status">
+                <template v-if="status == 3"><!-- GM.ST_WAIT_MIN_PARTICIPANTS -->
+                    <p>Waiting for at least 3 players...</p>
+                </template>
+                <template v-else-if="status == 4"><!-- GM.ST_WAIT_FOR_SETUP -->
+                    <p v-if="isJudge">
+                        <strong>Judge, time to play !</strong>
+                    </p>
+                    <p v-else>
+                        Waiting for the judge to play...
+                    </p>
+                </template>
+                <template v-else-if="status == 5"><!-- GM.ST_WAIT_FOR_PLAYERS -->
+                    <p v-if="isJudge">
+                        Waiting for players...
+                    </p>
+                    <p v-else>
+                        <strong>Time to play !</strong>
+                    </p>
+                </template>
+                <template v-else-if="status == 6"><!-- GM.ST_WAIT_FOR_VOTE -->
+                    <p v-if="isJudge">
+                        <strong>Judge, time to vote !</strong>
+                    </p>
+                    <p v-else>
+                        Waiting for the judge to vote...
+                    </p>
+                </template>
+                <template v-else-if="status == 7"><!-- GM.ST_WAIT_FOR_NEXT_ROUND -->
+                    <input type="button" value="Start next round!" :onclick="'javascript:player.nextRound(\'' + myPlayerid + '\');'" />
+                </template>
             </div>
         </div>
-    </span>
+        <div id="centerhead">
+            <img src="./jitsinghazard.png">
+        </div>
+        <div id="righthead"></div>
+        <div class="cardscont" v-bind:class="[status < 6 ? '' : 'overflow']">
+            <div class="cards" v-for="player in players" :key="player.id">
+                <div class="fcard" v-bind:style="[status == 6 && player.id != judgeId && player.id != myPlayerid?{'background-color': 'white'}:{'background-color': playerColor(player.idx)}]">
+                    <img src="playerFace1.svg">
+                    <template v-if="status !== 6 || player.id == judgeId || player.id == myPlayerid">
+                    <div>
+                        <template v-if="player.id == judgeId">
+                            <strong>*JUDGE*</strong><br/>
+                        </template>
+                        {{ player.name }}<br/>{{ player.score }}
+                    </div>
+                </template>
+                </div>
+                <div class="card">
+                    <img v-if="player.panel0.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel0.id + '.png'" />
+                    <img v-else src="blank.png" />
+            </div>
+                <div class="card">
+                    <img v-if="player.panel1.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel1.id + '.png'" />
+                    <img v-else src="blank.png" />
+                </div>
+                <div class="card">
+                    <img v-if="player.panel2.id != -1" :src="'https://rcg-cdn.explosm.net/panels/' + player.panel2.id + '.png'" v-bind:class="{ 'red-card': bonus_round }" />
+                    <img v-else src="blank.png" />
+                </div>
+                <div class = "winner" v-if="isJudge && status == 6 && player.id != myPlayerid">
+                    <input type="button" value="Winner!" :onclick="'javascript:player.vote(\'' + player.id + '\');'" />
+                </div>
+            </div>
+            
+        </div>
+        
+    <div id="hand">
+        <div id="hand-0" v-bind:class="[status < 6 ? 'above' : 'below']">
+            <div class="card" v-for="(card, index) in cards" :key="card.id" >
+                <img :src="'https://rcg-cdn.explosm.net/panels/' + card.id + '.png'" />
+                <div>
+                    <input type="button" value="1" :onclick="'javascript:player.pickCard(' + index + ', 0);'" />
+                    <input type="button" value="2" :onclick="'javascript:player.pickCard(' + index + ', 1);'" />
+                    <input type="button" value="3" :onclick="'javascript:player.pickCard(' + index + ', 2);'" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+    </div>
+
+   
+
 <div id="meet">
+
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.has('room'))
